@@ -1,12 +1,37 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { View, Text, ImageBackground, StyleSheet, ActivityIndicator } from 'react-native';
+import { getImage } from '../../../assets/images';
+import { SpaceComponent } from '../../components';
+import { appColor } from '../../contasts/appColor';
+
 
 const SplashScreen = () => {
   return (
-    <View>
-      <Text>SplashScreen</Text>
-    </View>
-  )
+    <ImageBackground style={styles.container} source={getImage.splash_Img2}>
+      <View style={styles.innerContainer}>
+  
+        <ActivityIndicator color={appColor.danger} style={{marginTop:-40}} size={30}/>
+        
+      </View>
+    </ImageBackground>
+  );
 }
 
-export default SplashScreen
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+  },
+});
+
+export default SplashScreen;
