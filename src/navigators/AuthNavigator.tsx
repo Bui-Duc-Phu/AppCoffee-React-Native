@@ -2,6 +2,8 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { LoginScreen } from '../screens';
+import OnboardingScreen from '../screens/auth/OnboardingScreen';
+
 
 const AuthNavigator = () => {
 
@@ -9,8 +11,10 @@ const AuthNavigator = () => {
 
 
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-        <Stack.Screen name='LoginScreen' component={LoginScreen}/>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='OnboardingScreen' component={OnboardingScreen} />
+      <Stack.Screen name='LoginScreen' component={LoginScreen} />
+
     </Stack.Navigator>
   )
 }

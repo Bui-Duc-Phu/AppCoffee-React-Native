@@ -1,10 +1,19 @@
-import { View, Text } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
+import { Button, View } from 'react-native'
 
 const HomeScreen = () => {
   return (
-    <View>
-      <Text>HomeScreen</Text>
+    <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
+    
+    <Button
+        onPress={async ()=>{ await AsyncStorage.clear()
+        }}
+        title="Logout"
+        color="red" 
+      />
+
+   
     </View>
   )
 }
