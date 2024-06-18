@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { InputAccessoryView, StyleSheet } from 'react-native';
 import { appColor } from '../contasts/appColor';
 import { RadioButton } from 'react-native-paper';
 
@@ -26,6 +26,14 @@ export const globalStyles = StyleSheet.create({
     minHeight: 40,
     borderRadius: 12,
     
+  },
+
+  input:{
+    flexDirection:'row',
+    borderWidth:1,
+    borderRadius:12,
+    borderColor:appColor.gray,
    
+
   }
 });
