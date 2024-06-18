@@ -1,13 +1,28 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { globalStyles } from '../../styles/globalStyles'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
 import Swiper from 'react-native-swiper';
 import { appInfo } from '../../contasts/appInfo';
 import { appColor } from '../../contasts/appColor';
 import { getImage } from '../../../assets/images';
+import TextComponent from '../../components/TextComponent';
+import { fontFamilies } from '../../contasts/fontFamilies';
 
 const OnboardingScreen = ({ navigation }: any) => {
   const [index, setIndex] = useState(0);
+
+  const handleSkip = () => {
+    navigation.navigate('LoginScreen');
+  };
+
+  const handleNext = () => {
+    if (index < 2) {
+      setIndex(index + 1);
+    } 
+    else {
+      navigation.navigate('LoginScreen');
+    }
+  };
 
   return (
     <View style={globalStyles.container}>
@@ -30,18 +45,17 @@ const OnboardingScreen = ({ navigation }: any) => {
           style={styles.image}
         />
       </Swiper>
+      
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-          <Text style={styles.footerText}>Skip</Text>
+        <TouchableOpacity onPress={handleSkip}>
+          <TextComponent text='Skip' color={appColor.darkred} font={fontFamilies.semiBold} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() =>{
-          index < 2 ?  setIndex(index + 1) : navigation.navigate('LoginScreen')
-   
-          
-        }}>
-          <Text style={styles.footerText}>Next</Text>
+
+        <TouchableOpacity onPress={handleNext}>
+          <TextComponent text='Next' color={appColor.darkred} font={fontFamilies.semiBold}/>
         </TouchableOpacity>
       </View>
+      
     </View>
   );
 }
@@ -69,7 +83,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: appColor.darkred,
-    fontSize:16
+    fontSize: 16,
   },
 });
 

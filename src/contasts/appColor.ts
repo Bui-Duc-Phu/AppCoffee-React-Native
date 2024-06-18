@@ -13,6 +13,8 @@ export const appColor = {
     danger: '#e74c3c',
     yellowDot:'#FFC100',
     darkred:'#8b0000',
+    dodgerblue :'#1e90ff',  
+    deepskyblue : '#00bfff'
 
 
 }
