@@ -1,8 +1,9 @@
-import { View, Text, StyleProp, ViewStyle, TextStyle, TouchableOpacity, LayoutChangeEvent } from 'react-native';
+import { View, Text, StyleProp, ViewStyle, TextStyle, TouchableOpacity, LayoutChangeEvent,  } from 'react-native';
 import React, { ReactNode, useState } from 'react';
-import TextComponent from './TextComponent';
+
 import { globalStyles } from '../styles/globalStyles';
 import { appColor } from '../contasts/appColor';
+import TextComponent from './TextComponent';
 
 interface Props {
     icon?: ReactNode;
@@ -17,10 +18,11 @@ interface Props {
     iconFlex?: 'right' | 'left';
     paddingLeftIcon?: number;
     paddingRightIcon?: number;
+    font?:string
 }
 
 const ButtonComponent = (props: Props) => {
-    const { icon, text, type, color, styles, textColor, textStyle, onPress, iconFlex, textSize, paddingLeftIcon, paddingRightIcon } = props;
+    const { icon, font,text, type, color, styles, textColor, textStyle, onPress, iconFlex, textSize, paddingLeftIcon, paddingRightIcon } = props;
 
     const [iconSize, setIconSize] = useState({ width: 0, height: 0 });
 
@@ -64,9 +66,12 @@ const ButtonComponent = (props: Props) => {
                 <TextComponent
                     text={text}
                     color={textColor}
-                    size={textSize}
+                    size={textSize }
+                    font={font}
                     styles={[{ textAlign: 'center', flex: 1 }, textStyle]}
                 />
+              
+
     
                 {icon && iconFlex === 'left' && <View style={{ width: iconSize.width + (paddingLeftIcon ?? 0) }} />}
 
@@ -90,16 +95,16 @@ const ButtonComponent = (props: Props) => {
                 />
             </TouchableOpacity>
 
-        ) :  (
+        ) :  type === 'text'? (
             <TouchableOpacity style={styles} onPress={onPress}>
                 <TextComponent  
                     text={text}
-                    color={textColor }
+                    color={textColor ??appColor.text}
                     size={textSize}
                     styles={[ textStyle]} 
                 />
             </TouchableOpacity>
-        )
+        ):undefined
     );
 };
 

@@ -1,29 +1,43 @@
-import { View, Text, StyleProp, TextStyle } from 'react-native'
-import React from 'react'
-import { appColor } from '../contasts/appColor'
-import { fontFamilies } from '../contasts/fontFamilies'
+import { Text, StyleProp, TextStyle, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
 
-interface Props{
-    text:string
-    size?:number
-    color?:string
-    flex?:number
-    font?:string
-    styles?:StyleProp<TextStyle>
-    title?:boolean
+interface Props {
+    text?: string;
+    size?: number;
+    font?: string;
+    color?: string;
+    bold?: boolean;
+    flex?: number;
+    styles?: StyleProp<TextStyle>; 
+    uppercase?: boolean;
+    underline?: boolean;
+    onPress?: () => void;
 }
 
+const TextComponent = (props: Props) => {
+    const { text, font, size, color, bold, flex, styles, uppercase, underline, onPress } = props;
 
-const TextComponent = (props:Props) => {
-    const {text,size,color,flex,font,title,styles,} = props
-  return <Text style={[
-    {
-        color : color ?? appColor.text,
-        flex : flex ?? 0    ,
-        fontSize : size ?? title? 20 :14,
-        fontFamily :font ??  title ? fontFamilies.bold : undefined
-    },styles
-  ]}>{text}</Text>
+    const textStyles: StyleProp<TextStyle> = [
+        {
+            flex: flex ?? 1,
+            fontFamily: font ?? undefined,
+            fontSize: size ?? 16,
+            color: color ?? 'black',
+            textDecorationLine: underline ? 'underline' : undefined,
+            ...(bold && { fontWeight: 'bold' }),
+            textTransform: uppercase ? 'uppercase' : undefined,
+        },
+        styles
+    ];
+
+    return onPress ? (
+        <TouchableOpacity onPress={onPress}>
+            <Text style={textStyles}>{text}</Text>
+        </TouchableOpacity>
+    ) : (
+        <Text style={textStyles}>{text}</Text>
+    );
 }
 
-export default TextComponent
+export default TextComponent;
