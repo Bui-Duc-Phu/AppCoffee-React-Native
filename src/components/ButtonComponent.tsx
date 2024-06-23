@@ -1,4 +1,4 @@
-import { View, Text, StyleProp, ViewStyle, TextStyle, TouchableOpacity, LayoutChangeEvent,  } from 'react-native';
+import { View, Text, StyleProp, ViewStyle, TextStyle, TouchableOpacity, LayoutChangeEvent, Platform,  } from 'react-native';
 import React, { ReactNode, useState } from 'react';
 
 import { globalStyles } from '../styles/globalStyles';
@@ -30,6 +30,17 @@ const ButtonComponent = (props: Props) => {
         const { width, height } = event.nativeEvent.layout;
         setIconSize({ width, height });
     };
+    const shadowStyle = Platform.select({
+        ios: {
+            shadowOpacity: 0.5,
+            shadowColor: 'gray',
+            shadowRadius: 12,
+            shadowOffset: { width: 0, height: 2 },
+        },
+        android: {
+            elevation: 3,
+        },
+    });
 
     return (
         type === 'primary' ?
@@ -38,11 +49,15 @@ const ButtonComponent = (props: Props) => {
             <TouchableOpacity
                 style={[
                     globalStyles.buton,
+
                     {
                         backgroundColor: color ?? appColor.dodgerblue,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        ...shadowStyle,
+                    
+                    
                     },
                     styles,
                 ]}

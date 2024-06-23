@@ -7,6 +7,7 @@ import { appColor } from '../../contasts/appColor';
 
 import { getImage } from '../../../assets/images';
 import { Sms } from 'iconsax-react-native';
+import authenticationAPI from '../../networks/authAPi';
 
 
 const LoginScreen = () => {
@@ -15,13 +16,27 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(true);
 
+  
+
+  const headerLogin = async () => {
+    console.log('login')
+    try{
+      const res = await authenticationAPI.HandleAuthentication('/users')
+      console.log(res)
+      console.log(res.data)
+    }catch(err){
+      console.log(err)
+    }
+
+  }
+
 
 
 
 
 
   return (
-    <Container centerOnMap styles={[{ paddingTop: 70, justifyContent: 'flex-start' }]}>
+    <Container  centerOnMap styles={[{ paddingTop: 70, justifyContent: 'flex-start' }]}>
 
       <Image source={getImage.logo} style={{ width: 100, height: 100, }} />
       <SpaceComponent height={20} />
@@ -84,7 +99,7 @@ const LoginScreen = () => {
       <View style={{ height: '5%' }} />
       <ButtonComponent
         type='primary'
-        onPress={() => console.log('login')}
+        onPress={() => headerLogin()}
         text='Login'
         textColor='white'
         textSize={20}
@@ -104,7 +119,7 @@ const LoginScreen = () => {
       <View style={{ height: '3%' }} />
 
       <RowComponent >
-        <TouchableOpacity>
+        <TouchableOpacity >
           <Image source={getImage.google} style={{ height: 55, width: 55 }} />
         </TouchableOpacity>
 
