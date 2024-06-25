@@ -7,11 +7,17 @@ const prettyPrint = (response:any) => {
     const reset = '\x1b[0m';
     const cyan = '\x1b[36m'; // Màu cyan cho dấu ngoặc
   
-    const importantData = {
-      status: response.status,
-      message: response.message,
-      data: response.data,
-    };
+    let importantData: any = {};
+  
+    if (response.status !== undefined) {
+      importantData.status = response.status;
+    }
+  
+    if (response.message !== undefined) {
+      importantData.message = response.message;
+    }
+  
+    importantData.data = response.data || response;
   
     const formatted = JSON.stringify(importantData, null, 2)
       .replace(/"([^"]+)":/g, `${green}"$1":${yellow}`) // Định dạng keys

@@ -22,7 +22,7 @@ const initValue = {
 };
 
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}:any) => {
 
   const [error, setError] = useState('');
   const [values, setValues] = useState(initValue);
@@ -54,6 +54,7 @@ const SignUpScreen = () => {
           await AsyncStorage.setItem('auth',JSON.stringify(res.data.userData))
           LogRespone(res)
           setLoading(false)
+          navigation.navigate('Main', { screen: 'HomeScreen' });
         } else {
           setLoading(false)
           if (res.data.SQL_Error && Array.isArray(res.data.SQL_Error)) {
