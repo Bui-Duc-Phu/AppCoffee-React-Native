@@ -19,10 +19,11 @@ interface Props {
     paddingLeftIcon?: number;
     paddingRightIcon?: number;
     font?:string
+    borderRadius?:number
 }
 
 const ButtonComponent = (props: Props) => {
-    const { icon, font,text, type, color, styles, textColor, textStyle, onPress, iconFlex, textSize, paddingLeftIcon, paddingRightIcon } = props;
+    const { icon, font,borderRadius,text, type, color, styles, textColor, textStyle, onPress, iconFlex, textSize, paddingLeftIcon, paddingRightIcon } = props;
 
     const [iconSize, setIconSize] = useState({ width: 0, height: 0 });
 
@@ -55,6 +56,7 @@ const ButtonComponent = (props: Props) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        borderRadius: borderRadius ?? 12,
                         ...shadowStyle,
                     
                     

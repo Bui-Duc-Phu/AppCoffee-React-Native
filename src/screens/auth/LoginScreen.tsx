@@ -10,7 +10,7 @@ import { Sms } from 'iconsax-react-native';
 import authenticationAPI from '../../networks/authAPi';
 
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}:any) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,15 +18,10 @@ const LoginScreen = () => {
 
   
 
+
+
   const headerLogin = async () => {
-    console.log('login')
-    try{
-      const res = await authenticationAPI.HandleAuthentication('/users')
-      console.log(res)
-      console.log(res.data)
-    }catch(err){
-      console.log(err)
-    }
+  
 
   }
 
@@ -41,7 +36,7 @@ const LoginScreen = () => {
       <Image source={getImage.logo} style={{ width: 100, height: 100, }} />
       <SpaceComponent height={20} />
 
-      <TextComponent text='Coffe App' font={fontFamilies.bold} size={30} flex={0} color='darkred' />
+      <TextComponent text='Login' font={fontFamilies.bold} size={30} flex={0} color='darkred' />
       <SpaceComponent height={40} />
 
       <BoxView name='box Email'>
@@ -132,9 +127,9 @@ const LoginScreen = () => {
       <View style={{ height: '7%' }} />
 
       <RowComponent >
-        <TextComponent text='Don’t have a account?' flex={0} />
+        <TextComponent text='Don’t have an account?' flex={0} />
         <SpaceComponent width={5} />
-        <TextComponent text='Sign Up' color={appColor.link} flex={0} underline onPress={() => console.log()} />
+        <TextComponent text='Sign Up' color={appColor.link} flex={0} underline onPress={() => navigation.navigate("SignUpScreen")} />
       </RowComponent>
 
     </Container>

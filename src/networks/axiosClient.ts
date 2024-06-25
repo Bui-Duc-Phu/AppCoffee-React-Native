@@ -21,14 +21,17 @@ axiosClient.interceptors.request.use(async (config: any) => {
 
 axiosClient.interceptors.response.use(
     res => {
-        if (res.data && res.status === 200) {
-            return res.data;
-        }
-        throw new Error('Error');
+        return Promise.reject(res); 
     },
     error => {
-        console.log(`Error api ${JSON.stringify(error)}`);
-        throw new Error(error.response);
+        if (error.response) {
+            const { response } = error;
+            console.log(`\n\n\nError api 111 ${JSON.stringify(response.data)}`);
+            return Promise.reject(response.data);
+        } else {
+            console.log(`\n\n\nError api 222 ${JSON.stringify(error)}`);
+            return Promise.reject(error);
+        }
     },
 );
 

@@ -44,6 +44,7 @@ const InputComponent = (props: Props) => {
                 onBlur={() => setFocused(false)}
                 secureTextEntry={isPassword && isShowPass}
                 style={[stylesContainer.inputText, globalStyles.text, { color: appColor.text }]}
+                autoCapitalize='none'
             />
             <TouchableOpacity onPress={() => setIsShowPass(!isShowPass)}>
                 {
