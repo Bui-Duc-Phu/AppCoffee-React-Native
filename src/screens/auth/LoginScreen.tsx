@@ -8,20 +8,50 @@ import { appColor } from '../../contasts/appColor';
 import { getImage } from '../../../assets/images';
 import { Sms } from 'iconsax-react-native';
 import authenticationAPI from '../../networks/authAPi';
+import { LogRespone } from '../../utils/LogRespone';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAuth, authSelector } from '../../redux/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
 
 
-const LoginScreen = ({navigation}:any) => {
+const LoginScreen = ({ navigation }: any) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(true);
 
-  
+  const dispatch = useDispatch()
+  const auth = useSelector(authSelector)
+  const mmkv = new MMKV();
+
+
 
 
 
   const headerLogin = async () => {
+    const res:any =await  authenticationAPI.HandleAuthentication(
+      '/login',
+      {
+        email,
+        password,
+      },
+      'post'
+    );
+
+    if(res  &&  res.status === 200){
   
+      LogRespone(res)
+      await dispatch(addAuth(res.data.userData))
+      await AsyncStorage.setItem('auth', rememberPassword ? JSON.stringify(res.data.userData) : email) 
+      mmkv.set('mmvkData','xin chao cac ban')
+
+      
+  
+    }else{
+      console.log('login false : ' , res)
+      LogRespone(res)
+    }
 
   }
 
@@ -31,7 +61,7 @@ const LoginScreen = ({navigation}:any) => {
 
 
   return (
-    <Container  centerOnMap styles={[{ paddingTop: 70, justifyContent: 'flex-start' }]}>
+    <Container centerOnMap styles={[{ paddingTop: 70, justifyContent: 'flex-start' }]}>
 
       <Image source={getImage.logo} style={{ width: 100, height: 100, }} />
       <SpaceComponent height={20} />
@@ -76,9 +106,9 @@ const LoginScreen = ({navigation}:any) => {
             value={rememberPassword}
             onChange={() => setRememberPassword(!rememberPassword)}
             thumbColor={appColor.darkred}
-            trackColor={{ false:appColor.gray2, true:appColor.dodgerblue }}
+            trackColor={{ false: appColor.gray2, true: appColor.dodgerblue }}
           />
-          <TextComponent text='Remember Me' size={13} color={appColor.black} bold/>
+          <TextComponent text='Remember Me' size={13} color={appColor.black} bold />
         </RowComponent>
         <TextComponent
           onPress={() => console.log('Forgot Password pressed')}

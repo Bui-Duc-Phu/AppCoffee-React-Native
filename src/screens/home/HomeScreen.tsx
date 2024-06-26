@@ -11,7 +11,10 @@ const HomeScreen = () => {
   return (
     <View style={{justifyContent:'center',alignItems:'center',flex:1,backgroundColor:'white'}}>
      <ButtonComponent  type='primary' text='logout' textColor='black' textSize={15} color='green'
-      onPress={()=> dispatch(removeAuth({}))}  />
+      onPress={()=>{ 
+         AsyncStorage.removeItem('auth');
+         AsyncStorage.clear()
+        dispatch(removeAuth({}))}}  />
 
        
     </View>

@@ -32,6 +32,9 @@ const SignUpScreen = ({navigation}:any) => {
   const handleChangeValue = (key: string, value: string) => {
     setValues({ ...values, [key]: value });
   };
+
+
+
   
   const headerLogin = async () => {
     setLoading(true)
@@ -52,9 +55,10 @@ const SignUpScreen = ({navigation}:any) => {
         if (res && res.status === 201) {
           console.log('Register successful');
           await AsyncStorage.setItem('auth',JSON.stringify(res.data.userData))
+          await AsyncStorage.setItem('localData',JSON.stringify(res.data.userData.email))
           LogRespone(res)
           setLoading(false)
-          navigation.navigate('Main', { screen: 'HomeScreen' });
+         
         } else {
           setLoading(false)
           if (res.data.SQL_Error && Array.isArray(res.data.SQL_Error)) {

@@ -11,14 +11,11 @@ import { SplashScreen } from '../screens'
 const AppRouter = () => {
 
     const { getItem} = useAsyncStorage("auth");
-    const auth = useSelector(authSelector)
+  
+    const auth : any = useSelector(authSelector)
     const disPatch = useDispatch()
 
     const [isShowSplash, setIsShowSplash] = useState(true);
-
-   
-
-
 
 
     useEffect(() => {
@@ -28,18 +25,18 @@ const AppRouter = () => {
         }, 1500);
         return () => clearTimeout(timeout);
     }, []);
-    
-    
+   
 
     const checkLogin =  async() =>{
         const res:any = await getItem()
-        disPatch(addAuth(JSON.parse(res)))
-    }
 
+      await disPatch(addAuth(JSON.parse(res)))
+       console.log('auth local: ',auth)
+    }
     
     return (
         <>
-            { isShowSplash? <SplashScreen/> :    auth.accesstoken ? <MainNavigator /> : <AuthNavigator />}
+            { isShowSplash? <SplashScreen/> :  auth && auth.accesstoken ? <MainNavigator /> : <AuthNavigator />}
         </>
     )
 }

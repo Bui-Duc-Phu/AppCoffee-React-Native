@@ -25,7 +25,7 @@ const OnboardingScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container,globalStyles.centerMap,{paddingHorizontal:0}]}>
       <Swiper
         style={styles.swiper}
         loop={false}
@@ -65,10 +65,9 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
   },
   image: {
-    flex: 1,
     width: appInfo.sizes.WIDTH,
     height: appInfo.sizes.HEIGHT,
-    resizeMode: 'center',
+    resizeMode: 'center', 
   },
   footer: {
     paddingHorizontal: 16,
