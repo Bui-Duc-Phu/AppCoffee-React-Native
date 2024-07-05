@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import OnboardingScreen from '../screens/auth/OnboardingScreen';
-import { LoginScreen } from '../screens';
+import { LoginScreen, VerificationScreen } from '../screens';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import { MMKV } from 'react-native-mmkv';
 
@@ -30,9 +30,12 @@ const AuthNavigator = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {isOnboarding && <Stack.Screen name='OnboardingScreen' component={OnboardingScreen}/>}
+
+      {/* {isOnboarding && <Stack.Screen name='OnboardingScreen' component={OnboardingScreen}/>} */}
       <Stack.Screen name='LoginScreen' component={LoginScreen} />
       <Stack.Screen name='SignUpScreen' component={SignUpScreen} />
+      <Stack.Screen name='VerificationScreen' component={VerificationScreen} />
+      
     </Stack.Navigator>
   )
 }

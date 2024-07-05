@@ -26,7 +26,6 @@ const prettyPrint = (response:any) => {
       .replace(/{/g, `${cyan}{${reset}`) // Định dạng dấu ngoặc mở
       .replace(/}/g, `${cyan}}${reset}`) // Định dạng dấu ngoặc đóng
       .replace(/"status": (\d+)/g, `${red}"status": $1${reset}`); // Định dạng cặp key-value của status
-  
     console.log(formatted);
   };
 

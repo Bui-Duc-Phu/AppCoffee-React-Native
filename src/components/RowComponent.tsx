@@ -21,6 +21,7 @@ import {
     styles?: StyleProp<ViewStyle>;
     children: ReactNode;
     onPress?: () => void;
+    name?:string
   }
   
   const RowComponent = (props: Props) => {

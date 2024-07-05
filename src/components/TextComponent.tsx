@@ -27,6 +27,7 @@ const TextComponent = (props: Props) => {
             textDecorationLine: underline ? 'underline' : undefined,
             ...(bold && { fontWeight: 'bold' }),
             textTransform: uppercase ? 'uppercase' : undefined,
+            
         },
         styles
     ];

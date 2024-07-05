@@ -1,6 +1,7 @@
 import { InputAccessoryView, StyleSheet } from 'react-native';
 import { appColor } from '../contasts/appColor';
 import { RadioButton } from 'react-native-paper';
+import { appInfo } from '../contasts/appInfo';
 
 export const globalStyles = StyleSheet.create({
   container: {
@@ -14,6 +15,9 @@ export const globalStyles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   
+  },
+  notStatusBar:{
+    paddingTop:appInfo.sizes.HEIGHT*0.3
   },
   body:{
     flex: 1,

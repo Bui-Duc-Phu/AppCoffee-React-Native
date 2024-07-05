@@ -14,7 +14,8 @@ export const appColor = {
     yellowDot:'#FFC100',
     darkred:'#8b0000',
     dodgerblue :'#1e90ff',  
-    deepskyblue : '#00bfff'
+    deepskyblue : '#00bfff',
+    yellow2 : '#FFC100',
 
 
 }

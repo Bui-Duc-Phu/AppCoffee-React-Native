@@ -15,19 +15,20 @@ interface Props {
     alowClear?: boolean;
     isPassword?: boolean;
     styles?: StyleProp<ViewStyle>;
+    onEnd?: () => void
+    onBlur?: () => void
 }
 
 
 
 
 const InputComponent = (props: Props) => {
-    const { value, onChangeText, affix, suffix, hint, alowClear, isPassword, styles } = props;
+    const { value, onChangeText, onBlur, onEnd, affix, suffix, hint, alowClear, isPassword, styles } = props;
 
     const [isShowPass, setIsShowPass] = useState(isPassword ?? false);
     const [focused, setFocused] = useState(false);
 
-
-
+   
 
 
 
@@ -37,14 +38,19 @@ const InputComponent = (props: Props) => {
             {affix && <SpaceComponent width={7} />}
             <TextInput
                 placeholder={hint ?? ''}
-                onChangeText={val => onChangeText(val)}
+                onChangeText={val => {onChangeText(val.trim())}}
                 value={value}
                 placeholderTextColor={'darkgray'}
                 onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                secureTextEntry={isPassword && isShowPass}
-                style={[stylesContainer.inputText, globalStyles.text, { color: appColor.text }]}
-                autoCapitalize='none'
+                onBlur={() => {
+                    if (focused){setFocused(false)}
+                    if (onBlur){onBlur()}
+                }}
+            secureTextEntry={isPassword && isShowPass}
+            style={[stylesContainer.inputText, globalStyles.text, { color: appColor.text }]}
+            autoCapitalize='none'
+            onEndEditing={onEnd}
+                
             />
             <TouchableOpacity onPress={() => setIsShowPass(!isShowPass)}>
                 {

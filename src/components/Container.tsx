@@ -17,7 +17,7 @@ const Container = (props:Props) => {
   return (
     isScroll ? (
       centerOnMap
-      ?  <ScrollView style={[globalStyles.container,globalStyles.centerMap,styles]}>{children}</ScrollView>
+      ?  <ScrollView  showsVerticalScrollIndicator={false} style={[globalStyles.container,globalStyles.centerMap,styles]}>{children}</ScrollView>
       :  <ScrollView style={[globalStyles.container,styles]}>{children}</ScrollView>
     ):(
         centerOnMap

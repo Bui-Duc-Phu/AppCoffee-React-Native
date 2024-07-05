@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Switch } from 'react-native';
 import { BodyView, BoxView, ButtonComponent, CardView, Container, InputComponent, RowComponent, SectionComponent, SpaceComponent, TextComponent } from '../../components';
 import { globalStyles } from '../../styles/globalStyles';
@@ -6,67 +6,96 @@ import { fontFamilies } from '../../contasts/fontFamilies';
 import { appColor } from '../../contasts/appColor';
 
 import { getImage } from '../../../assets/images';
-import { Sms } from 'iconsax-react-native';
+import { Lock, Sms } from 'iconsax-react-native';
 import authenticationAPI from '../../networks/authAPi';
 import { LogRespone } from '../../utils/LogRespone';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAuth, authSelector } from '../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MMKV } from 'react-native-mmkv';
+import {MMKV} from 'react-native-mmkv';
+import { isValidEmail } from '../../utils/isEmail';
 
+
+
+interface ErorMessage {
+  errEmail: string,
+  errPassword: string
+  
+
+}
 
 const LoginScreen = ({ navigation }: any) => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(true);
+  const [errMessage, setErrMessage] = useState<ErorMessage>({ errEmail: 'nullll', errPassword: '',  });
+  const [isShowError, setIsShowError] = useState(false);
 
-  const dispatch = useDispatch()
-  const auth = useSelector(authSelector)
-  const mmkv = new MMKV();
-
-
+  const dispatch = useDispatch();
 
 
+  const hasErrors = (errors:any) => {
+    return Object.values(errors).some(error => error !== '');
+  };
+  
 
   const headerLogin = async () => {
-    const res:any =await  authenticationAPI.HandleAuthentication(
-      '/login',
-      {
-        email,
-        password,
-      },
-      'post'
-    );
-
-    if(res  &&  res.status === 200){
-  
-      LogRespone(res)
-      await dispatch(addAuth(res.data.userData))
-      await AsyncStorage.setItem('auth', rememberPassword ? JSON.stringify(res.data.userData) : email) 
-      mmkv.set('mmvkData','xin chao cac ban')
-
+    
+     validate()
       
-  
-    }else{
-      console.log('login false : ' , res)
-      LogRespone(res)
-    }
-
+     if(!hasErrors(errMessage)){
+      console.log('vao roi')
+      console.log(errMessage)
+       const res: any = await authenticationAPI.HandleAuthentication('/login', { email, password }, 'post');
+       if (res && res.status === 200) {
+         LogRespone(res);
+        dispatch(addAuth(res.data.userData));
+         await AsyncStorage.setItem('auth', rememberPassword ? JSON.stringify(res.data.userData) : email);
+       } else {
+         console.log('Login failed:', res);
+         LogRespone(res);
+       }
+     }  
   }
 
+  const validate =async() => {
+    let isValid = true;
+    let cnt  = 1 
+
+    if (!email && !errMessage.errPassword.includes('Email & Password is required!')) {
+       setErrMessage(prev => ({ ...prev, errEmail: 'Email & Password is required!' }));
+       await ++cnt
+      console.log(errMessage.errEmail)
+      console.log(cnt)
+      isValid = false;
+    } else if (email &&  !isValidEmail(email)) {
+      setErrMessage(prev => ({ ...prev, errEmail: 'Invalid email!' }));
+      isValid = false;
+    } else {
+      setErrMessage(prev => ({ ...prev,  errEmail: '' }));
+    }
 
 
-
-
+    if (!password && !errMessage.errEmail.includes('Email & Password is required!') && cnt===1) {
+      setErrMessage(prev => ({ ...prev, errPassword: 'Email & Password is required!'}));
+      isValid = false;
+    } else if ( password && password.length < 6) {
+      setErrMessage(prev => ({ ...prev, errPassword: 'Password must be at least 6 characters long!' }));
+      isValid = false;
+    } else {
+      setErrMessage(prev => ({ ...prev, errPassword: '' }));
+    }
+    setIsShowError(!isValid);
+  }
 
   return (
-    <Container centerOnMap styles={[{ paddingTop: 70, justifyContent: 'flex-start' }]}>
+    <Container isScroll styles={[{ paddingTop: 70, }]}>
+      <CardView><Image source={getImage.logo} style={{ width: 100, height: 100 }} /></CardView>
 
-      <Image source={getImage.logo} style={{ width: 100, height: 100, }} />
       <SpaceComponent height={20} />
+      
+      <CardView><TextComponent text='Login' font={fontFamilies.bold} size={30} flex={0} color='darkred' /></CardView>
 
-      <TextComponent text='Login' font={fontFamilies.bold} size={30} flex={0} color='darkred' />
       <SpaceComponent height={40} />
 
       <BoxView name='box Email'>
@@ -80,6 +109,7 @@ const LoginScreen = ({ navigation }: any) => {
           hint='Enter Email'
           affix={<Sms size={22} color={appColor.gray} />}
           alowClear
+          onEnd={validate}
         />
       </BoxView>
 
@@ -87,24 +117,37 @@ const LoginScreen = ({ navigation }: any) => {
 
       <BoxView name='Box Password'>
         <CardView styles={[{ paddingStart: 10 }]}>
-          <TextComponent text='Passwrod' flex={1} bold />
+          <TextComponent text='Password' flex={1} bold />
         </CardView>
         <SpaceComponent height={10} />
         <InputComponent
           onChangeText={val => setPassword(val)}
           value={password}
-          hint='Enter Email'
-          affix={<Sms size={22} color={appColor.gray} />}
+          hint='Enter Password'
+          affix={<Lock size={22} color={appColor.gray} />}
           alowClear
+          onEnd={validate}
+          isPassword
         />
       </BoxView>
 
-      <SpaceComponent height={15} />
-      <RowComponent >
-        <RowComponent styles={{ flex: 1, justifyContent: 'flex-start' }}>
+      <SpaceComponent height={10} />
+
+      {isShowError && (
+        <CardView styles={{justifyContent:'flex-start',paddingStart:20}}>
+             <BoxView styles={{ justifyContent: 'flex-start' }}>
+          {errMessage.errEmail && <TextComponent text={errMessage.errEmail} size={12} bold color={'red'}/>}
+          {errMessage.errPassword && <TextComponent text={errMessage.errPassword} size={12} bold color={'red'} />}
+        </BoxView>
+        </CardView>
+      )}
+          <SpaceComponent height={10} />
+
+      <RowComponent name='Remember and forgot password box'>
+        <RowComponent name='Remember box' styles={{ flex: 1, justifyContent: 'flex-start' }}>
           <Switch
             value={rememberPassword}
-            onChange={() => setRememberPassword(!rememberPassword)}
+            onValueChange={() => setRememberPassword(!rememberPassword)}
             thumbColor={appColor.darkred}
             trackColor={{ false: appColor.gray2, true: appColor.dodgerblue }}
           />
@@ -121,10 +164,12 @@ const LoginScreen = ({ navigation }: any) => {
           flex={0}
         />
       </RowComponent>
-      <View style={{ height: '5%' }} />
+
+      <SpaceComponent height={30} />
+
       <ButtonComponent
         type='primary'
-        onPress={() => headerLogin()}
+        onPress={headerLogin}
         text='Login'
         textColor='white'
         textSize={20}
@@ -133,38 +178,38 @@ const LoginScreen = ({ navigation }: any) => {
         color='brown'
       />
 
-      <View style={{ height: '5%' }} />
+      <SpaceComponent height={30} />
 
-      <RowComponent  >
-        <View style={[globalStyles.centerMap, { flex: 1, height: 1, backgroundColor: appColor.black, marginHorizontal: 10, }]} />
+      <RowComponent>
+        <View style={[globalStyles.centerMap, { flex: 1, height: 1, backgroundColor: appColor.black, marginHorizontal: 10 }]} />
         <TextComponent text='or sign in with' size={13} flex={0} />
         <View style={{ flex: 1, height: 1, backgroundColor: appColor.black, marginHorizontal: 10 }} />
       </RowComponent>
 
-      <View style={{ height: '3%' }} />
+      <SpaceComponent height={20} />
 
-      <RowComponent >
-        <TouchableOpacity >
+      <RowComponent>
+        <TouchableOpacity>
           <Image source={getImage.google} style={{ height: 55, width: 55 }} />
         </TouchableOpacity>
-
         <SpaceComponent width={20} />
         <TouchableOpacity>
           <Image source={getImage.facebook} style={{ height: 50, width: 50 }} />
         </TouchableOpacity>
       </RowComponent>
 
-      <View style={{ height: '7%' }} />
+      <SpaceComponent height={30} />
 
-      <RowComponent >
+      <RowComponent>
         <TextComponent text='Don’t have an account?' flex={0} />
         <SpaceComponent width={5} />
-        <TextComponent text='Sign Up' color={appColor.link} flex={0} underline onPress={() => navigation.navigate("SignUpScreen")} />
+        <TextComponent text='Sign Up' color={appColor.link} flex={0} underline onPress={() => navigation.navigate('SignUpScreen')} />
       </RowComponent>
-
     </Container>
   );
 }
+
+
 
 
 

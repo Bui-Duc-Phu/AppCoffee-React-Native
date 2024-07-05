@@ -30,7 +30,7 @@ const AppRouter = () => {
     const checkLogin =  async() =>{
         const res:any = await getItem()
 
-      await disPatch(addAuth(JSON.parse(res)))
+      disPatch(addAuth(JSON.parse(res)))
        console.log('auth local: ',auth)
     }
     
