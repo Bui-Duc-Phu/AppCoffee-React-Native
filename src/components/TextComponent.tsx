@@ -1,5 +1,5 @@
-import { Text, StyleProp, TextStyle, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { Text, StyleProp, TextStyle, TouchableOpacity, LayoutChangeEvent } from 'react-native';
+import React, { useState, useCallback } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
@@ -9,14 +9,16 @@ interface Props {
     color?: string;
     bold?: boolean;
     flex?: number;
-    styles?: StyleProp<TextStyle>; 
+    styles?: StyleProp<TextStyle>;
     uppercase?: boolean;
     underline?: boolean;
     onPress?: () => void;
+    witdhText?:(val : number) =>void
 }
 
 const TextComponent = (props: Props) => {
-    const { text, font, size, color, bold, flex, styles, uppercase, underline, onPress } = props;
+    const { text, witdhText ,font, size, color, bold, flex, styles, uppercase, underline, onPress } = props;
+    const [textWidth, setTextWidth] = useState<number>(0);
 
     const textStyles: StyleProp<TextStyle> = [
         {
@@ -27,18 +29,23 @@ const TextComponent = (props: Props) => {
             textDecorationLine: underline ? 'underline' : undefined,
             ...(bold && { fontWeight: 'bold' }),
             textTransform: uppercase ? 'uppercase' : undefined,
-            
         },
         styles
     ];
 
+    const handleLayout = useCallback((event: LayoutChangeEvent) => {
+        const { width } = event.nativeEvent.layout;
+        if(witdhText) witdhText(width)
+        setTextWidth(width);
+    }, []);
+
     return onPress ? (
         <TouchableOpacity onPress={onPress}>
-            <Text style={textStyles}>{text}</Text>
+            <Text style={textStyles} onLayout={handleLayout}>{text}</Text>
         </TouchableOpacity>
     ) : (
-        <Text style={textStyles}>{text}</Text>
+        <Text style={textStyles} onLayout={handleLayout}>{text}</Text>
     );
-}
+};
 
 export default TextComponent;

@@ -39,7 +39,7 @@ const ButtonComponent = (props: Props) => {
             shadowOffset: { width: 0, height: 2 },
         },
         android: {
-            elevation: 3,
+            elevation: 2,
         },
     });
 

@@ -78,15 +78,10 @@ const SignUpScreen = ({ navigation }: any) => {
           code: res.data.data.code,
           ...values,
         });
-        setLoading(false)
-        
-
-      
-       
+        setLoading(false) 
       }else{
         LogRespone(res.data)
-        setLoading(false)
-        
+        setLoading(false)     
       }
     } catch (error) {
        console.log('verifi errr : ',error)

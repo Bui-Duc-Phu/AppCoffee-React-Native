@@ -22,7 +22,7 @@ const localstyles = StyleSheet.create({
     backgroundColor:'white',
     minHeight: appInfo.sizes.HEIGHT*0.105,
     paddingTop:appInfo.sizes.HEIGHT*0.03,
-    paddingHorizontal:appInfo.sizes.WIDTH*0.05,
+    paddingHorizontal:appInfo.sizes.WIDTH*0.01,
     elevation: 5,
     borderBottomWidth:1,
     borderColor:'rgba(0,0,0,0.1)'

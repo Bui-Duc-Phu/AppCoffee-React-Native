@@ -7,6 +7,7 @@ const images = {
     google: require('./google.png'),
     facebook: require('./facebook.png'),
     verification: require('./verification.png'),
+    password: require('./password.png'),
 };
 export const getImage = images;
 

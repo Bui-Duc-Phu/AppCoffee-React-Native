@@ -2,6 +2,7 @@
 import axios from "axios";
 import queryString from "query-string";
 import { appInfo } from "../contasts/appInfo";
+import { tokens } from "react-native-paper/lib/typescript/styles/themes/v3/tokens";
 
 const axiosClient = axios.create({
     baseURL: appInfo.BASE_URL,
@@ -14,8 +15,6 @@ axiosClient.interceptors.request.use(async (config: any) => {
         Accept: 'application/json',
         ...config.headers,
     };
-
- 
     return config;
 });
 

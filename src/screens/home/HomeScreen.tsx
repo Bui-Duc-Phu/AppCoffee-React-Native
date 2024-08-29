@@ -4,6 +4,8 @@ import { Button, Text, View } from 'react-native'
 import { ButtonComponent } from '../../components'
 import { useDispatch } from 'react-redux'
 import { removeAuth } from '../../redux/reducers/authReducer'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { LoginButton, LoginManager, Profile } from 'react-native-fbsdk-next'
 
 const HomeScreen = () => {
 
@@ -14,9 +16,9 @@ const HomeScreen = () => {
       onPress={()=>{ 
          AsyncStorage.removeItem('auth');
          AsyncStorage.clear()
+         GoogleSignin.signOut()
+         LoginManager.logOut()
         dispatch(removeAuth({}))}}  />
-
-       
     </View>
   )
 }

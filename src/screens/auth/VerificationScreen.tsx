@@ -39,7 +39,7 @@ const VerificationScreen = ({ navigation, route }: any) => {
     const [errMessage, setErrMessage] = useState('');
     const dispatch = useDispatch()
 
-    const [corretCode, setCorretCode] = useState('1234');
+    const [corretCode, setCorretCode] = useState(code);
 
     const input1Ref = useRef<TextInput>(null);
     const input2Ref = useRef<TextInput>(null);
@@ -67,6 +67,10 @@ const VerificationScreen = ({ navigation, route }: any) => {
 
     }, [codeValues])
 
+    useEffect(()=>{
+      countdownFrom120()
+    },[corretCode])
+
 
 
 
@@ -92,10 +96,12 @@ const VerificationScreen = ({ navigation, route }: any) => {
                 clearInterval(intervalRef.current!);
                 intervalRef.current = null;
                 setCorretCode('')
+                
                 setNewCode('')
             }
         }, 1000);
     };
+  
 
     const handleContinue = async () => {
         let show = false
@@ -103,25 +109,47 @@ const VerificationScreen = ({ navigation, route }: any) => {
         setLoading(true)
         if (newCode) {
             console.log('click : ', newCode)
-            if (newCode == code) {
+            if (newCode == corretCode) {
                 registerAccount()   
             }else{
                 setErrMessage('Code is incorrect !!!')
+                console.log('kochinh ')
                 show = true
                 setLoading(false)
             }
-            
-
         }else{
-            setErrMessage('Code is incorrect !!!')
-               
+            setErrMessage('Code is invalid !!!')  
             setLoading(false)
             show = true
-
         }
-
         setIsShowErr(show)
-       
+    }
+    
+    const  handleReSend = async() =>{
+      
+         try {
+            const res : any =  await authenticationAPI.HandleAuthentication(
+                '/verification',
+                {email:email},
+                'post'
+            )
+            console.log(res)
+            LogRespone(res)
+            if(res && res.status === 200){
+              setCorretCode(res.data.data.code)
+              LogRespone(res.data.data)
+              console.log(' code : ' , res.data.data.code)
+            }else{
+                LogRespone(res.data)
+                setLoading(false)   
+            } 
+         } catch (error : any) {
+            console.log('err re send',error)
+         }
+
+         console.log('correct code : ' , corretCode)
+     
+     
     }
 
 
@@ -147,13 +175,13 @@ const VerificationScreen = ({ navigation, route }: any) => {
                 setLoading(false)
                 if (res.data.SQL_Error && Array.isArray(res.data.SQL_Error)) {
                     setLoading(false)
-                    console.log('Failed to register1:');
+                    console.log('Failed to register1:' ,res.data.SQL_Error);
+                    setErrMessage(res.data.SQL_Error)
                     LogRespone(res)
-
                 } else {
                     setLoading(false)
                     console.log('Failed to register2:', res.message || 'Unknown error');
-
+                    setErrMessage(res.message )
                 }
             }
         }
@@ -204,12 +232,12 @@ const VerificationScreen = ({ navigation, route }: any) => {
                         <TextComponent text={`${countdown}`} flex={0} size={15} font={fontFamilies.semiBold} />
                         <TextComponent text={` s  `} flex={0} size={15} />
                         {
-                            countdown === 0 && (
+                             (
                                 <>
                                     <ArrowRight size={24} color='black' />
                                     <TextComponent text={'  Re-Send'} flex={0} size={15} font={fontFamilies.bold} color='blue'
                                         onPress={() => {
-                                            countdownFrom120()
+                                            handleReSend()
                                         }}
                                     />
                                 </>
@@ -298,6 +326,10 @@ const VerificationScreen = ({ navigation, route }: any) => {
                             textStyle={{ fontFamily: fontFamilies.bold }}
                         />
                     </BoxView>
+                    <SpaceComponent height={20}/>
+                    <CardView styles={{ justifyContent: 'center' }}>
+                        {true && <TextComponent flex={0} text={errMessage} size={15} bold color={'red'} />}
+                    </CardView>
 
                 </Container>
             </>

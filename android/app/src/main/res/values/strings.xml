@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">appCoffee</string>
+    <string name="facebook_app_id">813656550838914</string>
+    <string name="facebook_client_token">966619f771ca00fb0a852cf43bef8fdc</string>
 </resources>
